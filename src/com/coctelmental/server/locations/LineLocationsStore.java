@@ -19,25 +19,37 @@ public class LineLocationsStore {
 		return singletonLineLocationsStore;
 	}
 	
-	public synchronized void addBusLocation(String resourceID, CollaboratorBusLocation receivedBusLocation) {
-		LineLocations lineLocations = lineLocationsList.get(resourceID);
+	public void addBusLocation(String resourceID, CollaboratorBusLocation receivedBusLocation) {
+		LineLocations lineLocations;
+		synchronized (lineLocationsList) {
+			lineLocations = lineLocationsList.get(resourceID);
+		}
 		if(lineLocations != null) {
-			lineLocations.addNewLocation(receivedBusLocation);
+			synchronized (lineLocations) {
+				lineLocations.addNewLocation(receivedBusLocation);				
+			}
 		}
 		else {
 			lineLocations = new LineLocations();   
 			lineLocations.addNewLocation(receivedBusLocation);
-			lineLocationsList.put(resourceID, lineLocations);
+			synchronized (lineLocationsList) {
+				lineLocationsList.put(resourceID, lineLocations);	
+			}
 		}
 	}
 
-	public synchronized List<BusLocation> getBusLocations(String resourceID) {
+	public List<BusLocation> getBusLocations(String resourceID) {
 		List<BusLocation> busLocations = null;
-		LineLocations targetLineLocations = lineLocationsList.get(resourceID);
+		LineLocations targetLineLocations;
+		synchronized (lineLocationsList) {
+			targetLineLocations = lineLocationsList.get(resourceID);	
+		}
 		if (targetLineLocations != null) {
-			busLocations = targetLineLocations.getLocations();
-			if (busLocations.isEmpty())
-				busLocations = null;
+			synchronized (targetLineLocations) {
+				busLocations = targetLineLocations.getLocations();	
+				if (busLocations.isEmpty())
+					busLocations = null;
+			}
 		}		
 		return busLocations;
 	}
