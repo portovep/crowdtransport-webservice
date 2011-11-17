@@ -17,8 +17,7 @@ public class LineLocations {
 	private int counter;
 	
 	private static final long LOCATION_LIFE_TIME = 60000;  // 1 min
-	private static final int MAX_DIF_LAT = 700;
-	private static final int MAX_DIF_LONG = 700;
+	private static final int MAX_DISTANCE_IN_METERS = 200; // distance in meters
 	
 	public LineLocations() {
 		counter = 0;
@@ -26,7 +25,7 @@ public class LineLocations {
 		busLocationList = new HashMap<Integer, StoredBusLocation>();
 	}
 	
-	public synchronized void addNewLocation(CollaboratorBusLocation receivedBusLocation) {
+	public void addNewLocation(CollaboratorBusLocation receivedBusLocation) {
 		// comprobamos si es un nuevo colaborador
 		if (isNewUser(receivedBusLocation.getUserID())) {
 			System.out.println("Log: New user");
@@ -74,7 +73,7 @@ public class LineLocations {
 		}
 	}
 	
-	public synchronized List<BusLocation> getLocations() {
+	public List<BusLocation> getLocations() {
 		ArrayList<BusLocation> foundLocations = new ArrayList<BusLocation>();
 		
 		Iterator<Integer> iterator = busLocationList.keySet().iterator();
@@ -121,17 +120,48 @@ public class LineLocations {
 	}
 	
 	private boolean isNear(StoredBusLocation fromGP, CollaboratorBusLocation toGP) {
-		int diffLat = fromGP.getLatitude() - toGP.getLatitude();
-		System.out.println("\ndiffLat: " + Math.abs(diffLat));
-		if(Math.abs(diffLat) > MAX_DIF_LAT )
-			return false;
+		Double distance = calculateDistance(fromGP.getLatitude(), fromGP.getLongitude(), 
+				toGP.getLatitude(), toGP.getLongitude());
 		
-		int diffLong = fromGP.getLongitude() - toGP.getLongitude();
-		System.out.println("diffLong: " + Math.abs(diffLong));
-		if(Math.abs(diffLong) > MAX_DIF_LONG)
-			return false;
+		System.out.println("Log: Distance: " + distance+ "m");
 		
+		if (distance >= MAX_DISTANCE_IN_METERS)
+			return false;
 		return true;
+	}
+	
+	private static double calculateDistance(double rlat1, double rlong1, double rlat2, double rlong2) {
+		/*
+		Haversine formula:
+		
+		a = sin²(Δlat/2) + cos(lat1).cos(lat2).sin²(Δlong/2)
+		c = 2.atan2(√a, √(1−a))
+		distance = R.c
+		
+		*/
+		final double radious = 6371000; // earth radious in meters
+		
+		double lat1 = rlat1 / 1E6;
+		double lat2 = rlat2 / 1E6;
+		
+		double long1 = rlong1 / 1E6;
+		double long2 = rlong2 / 1E6;
+		
+		// calculate Δlat and Δlong in radians
+		double dLat = Math.toRadians(lat2 - lat1);
+		double dLong = Math.toRadians(long2 - long1);
+		
+		// calculate a
+		double a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+					Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * 
+					Math.sin(dLong/2) * Math.sin(dLong/2);
+		
+		// calculate c
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		
+		// calculate distance
+		double distance = radious * c;
+		return distance;
 	}
 	
 	private void mergeWithStoredBusLocation(Integer busLocationID, CollaboratorBusLocation receivedBusLocation) {
