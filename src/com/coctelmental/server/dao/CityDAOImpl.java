@@ -6,44 +6,37 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class CityDAOImpl implements CityDAO {
 
 	@Override
 	public List<String> getCityNames() {
-        ArrayList<String> ciudades=new ArrayList<String>();
-        Connection con=null;
-        BDConnectionHandler bd=new BDConnectionHandlerImplMySQL();
+		ArrayList<String> cityNames = new ArrayList<String>();
+		Connection con = null;
+		DBConnectionHandler db = new DBConnectionHandlerImplMySQL();
 
-        String consulta="SELECT * FROM ciudades;";
-        
-        try
-        {
-            con=bd.setupConnection();
-            ResultSet rs=bd.executeQuery(con, consulta);
-            while(rs.next())
-            {           	
-            	ciudades.add(rs.getString(1));
-            }
-            rs.close();
-        }catch(Exception e)
-        {
-            e.printStackTrace();
-        }finally
-        {
-            if(con!=null)
-            {
-                try
-                {
-                    con.close();
-                }catch(SQLException sqle)
-                {
-                    System.err.println("Error al intentar cerrar la conexión:" + sqle.getMessage());
-                }
-            }
-        }				
-		return ciudades;
+		String query = "SELECT * FROM Cities;";
+
+		try {
+			con = db.setupConnection();
+			ResultSet rs = db.executeQuery(con, query);
+			while (rs.next()) {
+				cityNames.add(rs.getString(1));
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException sqle) {
+					System.err
+							.println("Error while trying to close the connection: "
+									+ sqle.getMessage());
+				}
+			}
+		}
+		return cityNames;
 	}
 
 }

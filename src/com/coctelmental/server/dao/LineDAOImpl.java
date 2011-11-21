@@ -6,41 +6,38 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class LineDAOImpl implements LineDAO {
 
 	@Override
-	public List<String> getLineNames(String targetCity) {
-		ArrayList<String> lineas=new ArrayList<String>();
-        Connection con=null;
-        BDConnectionHandler bd=new BDConnectionHandlerImplMySQL();
+	public List<String> getLineNames(String cityID) {
+		ArrayList<String> lineNames = new ArrayList<String>();
+		Connection con = null;
+		DBConnectionHandler db = new DBConnectionHandlerImplMySQL();
 
-        String consulta="SELECT * FROM lineas WHERE nombreCiudad='"+targetCity+"';";
-        
-        try
-        {
-            con=bd.setupConnection();
-            ResultSet rs=bd.executeQuery(con, consulta);        
-            while(rs.next()) {      	
-            	lineas.add(rs.getString(2));
-            }
-            rs.close();
-        }catch(Exception e)
-        {
-            e.printStackTrace();
-        }finally
-        {
-            if(con!=null)
-            {
-                try
-                {
-                    con.close();
-                }catch(SQLException sqle)
-                {
-                    System.err.println("Error al intentar cerrar la conexión:" + sqle.getMessage());
-                }
-            }
-        }				
-		return lineas;
+		// Note: Lines is quoted because it's a reserved keyword in MySQL
+		String query = "SELECT * FROM `Lines` WHERE city_name='"
+				+ cityID + "';";
+
+		try {
+			con = db.setupConnection();
+			ResultSet rs = db.executeQuery(con, query);
+			while (rs.next()) {
+				lineNames.add(rs.getString(2));
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException sqle) {
+					System.err
+							.println("Error while trying to close the connection: "
+									+ sqle.getMessage());
+				}
+			}
+		}
+		return lineNames;
 	}
 }

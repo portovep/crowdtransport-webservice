@@ -4,43 +4,38 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 public class TaxiLicenceDAOImpl implements TaxiLicenceDAO {
 
 	@Override
 	public String getOwnerID(String licenceNumber) {
-		String dni = null;
-        Connection con=null;
-        BDConnectionHandler bd=new BDConnectionHandlerImplMySQL();
+		String ownerID = null;
+		Connection con = null;
+		DBConnectionHandler db = new DBConnectionHandlerImplMySQL();
 
-		String query="SELECT dniTaxista FROM Licencia WHERE " +
-	                "nLicencia='"+licenceNumber+"';";
-        try
-        {
-            con=bd.setupConnection();
-            ResultSet rs=bd.executeQuery(con, query);
-                       
-            if(rs.next())
-            {
-            	dni = rs.getString(1);   
-            }            
-        }catch(Exception e)
-        {
-            e.printStackTrace();
-        }finally
-        {
-            if(con!=null)
-            {
-                try
-                {
-                    con.close();
-                }catch(SQLException sqle)
-                {
-                    System.err.println("Error al intentar cerrar la conexión:" + sqle.getMessage());
-                }
-            }
-        }
-        return dni;
+		String query = "SELECT assigned_DNI FROM TaxiLicences WHERE " + "licence_number='"
+				+ licenceNumber + "';";
+		try {
+			con = db.setupConnection();
+			ResultSet rs = db.executeQuery(con, query);
+
+			if (rs.next()) {
+				ownerID = rs.getString(1);
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException sqle) {
+					System.err
+							.println("Error while trying to close the connection: "
+									+ sqle.getMessage());
+				}
+			}
+		}
+		return ownerID;
 	}
 
 }

@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class BDConnectionHandlerImplMySQL implements BDConnectionHandler {
+public class DBConnectionHandlerImplMySQL implements DBConnectionHandler {
 
 	public Connection setupConnection() throws Exception {
 		try {
@@ -20,8 +20,7 @@ public class BDConnectionHandlerImplMySQL implements BDConnectionHandler {
 		String url = "";
 		try {
 			url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + BD_NAME;
-			Connection con = DriverManager.getConnection(url, BD_USER,
-					BD_USER_PASSWORD);
+			Connection con = DriverManager.getConnection(url, BD_USER, BD_USER_PASSWORD);
 			return con;
 		} catch (java.sql.SQLException e) {
 			System.err.println("Error connecting with " + url);
@@ -34,7 +33,6 @@ public class BDConnectionHandlerImplMySQL implements BDConnectionHandler {
 		try {
 			Statement s = con.createStatement();
 			ResultSet rs = s.executeQuery(query);
-			s.close();
 
 			return rs;
 		} catch (SQLException e) {

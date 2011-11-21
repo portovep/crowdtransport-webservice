@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public interface BDConnectionHandler {
+public interface DBConnectionHandler {
 	
     public static final String HOST = "localhost";
     public static final int PORT = 3306;

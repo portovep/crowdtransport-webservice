@@ -6,7 +6,7 @@ import com.coctelmental.server.model.User;
 
 public interface UserDAO {
 
-	public User getUserByID(String userID);
+	public User getUserByID(String id);
 	
 	public int addUser(User user);
 	
