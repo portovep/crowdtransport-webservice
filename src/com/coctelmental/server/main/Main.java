@@ -17,7 +17,7 @@ import com.coctelmental.server.resources.UserResource;
 
 public class Main extends Application {
 	
-	public static final String CONTEXT = "/UserManagerServer";
+	public static final String CONTEXT = "/webservice";
 	private static final int DEFAULT_PORT = 8085;
 	
 	public static void startServer(int port) throws Exception {
