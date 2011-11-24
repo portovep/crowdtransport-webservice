@@ -13,6 +13,9 @@ public class LocationHelper {
 	}
 
 	public List<BusLocation> getBusLocations(String resourceID) {
-		return LineLocationsStore.getInstance().getBusLocations(resourceID);
+		if (resourceID != null && !resourceID.equals(""))
+			return LineLocationsStore.getInstance().getBusLocations(resourceID);
+		else
+			return null;
 	}
 }

@@ -70,8 +70,8 @@ public class LocationResource extends ServerResource{
 	@Put("json")
 	public Representation putLocationJSON(Representation representation){
 		try{
-			JsonRepresentation geopointRepresentation = new JsonRepresentation(representation);
-			CollaboratorBusLocation receivedBusLocation = JsonHandler.fromJson(geopointRepresentation.getText(), CollaboratorBusLocation.class);
+			JsonRepresentation jsonRepresentation = new JsonRepresentation(representation);
+			CollaboratorBusLocation receivedBusLocation = JsonHandler.fromJson(jsonRepresentation.getText(), CollaboratorBusLocation.class);
 			if (receivedBusLocation == null || targetID.equals(""))
 				getResponse().setStatus(Status.CLIENT_ERROR_CONFLICT);	
 			else 

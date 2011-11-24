@@ -84,7 +84,7 @@ public class LineLocations {
 				// borramos colaboradores asociados
 				removeCollaborators(busLocationID);
 				// borramos la última localización proporcionada por el iterador
-				iterator.remove();
+				iterator.remove(); // avoid ConcurrentModificationException
 			}
 			else {
 				BusLocation bl = createBusLocation(sbl);
