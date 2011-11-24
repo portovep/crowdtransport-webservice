@@ -12,5 +12,5 @@ public interface ResourceTemplates {
 	public static final String LINE_RESOURCE_WITH_CITYID = "/city/{cityID}/line";
 	public static final String LOCATION_RESOURCE = "/location";
 	public static final String LOCATION_RESOURCE_WITH_ID = "/location/{locationID}";
-	
+	public static final String TAXI_LOCATION_RESOURCE = "/location-taxi";
 }
