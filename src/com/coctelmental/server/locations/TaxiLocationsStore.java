@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import com.coctelmental.server.model.GeoPoint;
+import com.coctelmental.server.model.MyGeoPoint;
 import com.coctelmental.server.model.Location;
 import com.coctelmental.server.model.TaxiDriverLocation;
 import com.coctelmental.server.model.TaxiLocation;
@@ -47,7 +47,7 @@ public class TaxiLocationsStore {
 		}
 	}
 	
-	public List<TaxiLocation> getTaxiLocations(GeoPoint gpUserLocation) {
+	public List<TaxiLocation> getTaxiLocations(MyGeoPoint gpUserLocation) {
 		List<TaxiLocation> taxiLocations = new ArrayList<TaxiLocation>();
 		
 		synchronized (taxiLocationsList) {
@@ -74,7 +74,7 @@ public class TaxiLocationsStore {
 		return taxiLocations;
 	}
 	
-	private boolean isWithinRange(GeoPoint gp1, GeoPoint gp2) {
+	private boolean isWithinRange(MyGeoPoint gp1, MyGeoPoint gp2) {
 		double distance = Tools.calculateDistance(gp1, gp2);
 		if (distance <= MAX_DISTANCE)
 			return true;

@@ -1,10 +1,10 @@
 package com.coctelmental.server.utils;
 
-import com.coctelmental.server.model.GeoPoint;
+import com.coctelmental.server.model.MyGeoPoint;
 
 public class Tools {
 
-	public static double calculateDistance(GeoPoint gp1, GeoPoint gp2) {
+	public static double calculateDistance(MyGeoPoint gp1, MyGeoPoint gp2) {
 		/*
 		Haversine formula:
 		
