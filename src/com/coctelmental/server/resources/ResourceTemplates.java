@@ -13,4 +13,6 @@ public interface ResourceTemplates {
 	public static final String LOCATION_RESOURCE = "/location";
 	public static final String LOCATION_RESOURCE_WITH_ID = "/location/{locationID}";
 	public static final String TAXI_LOCATION_RESOURCE = "/location-taxi";
+	public static final String TAXI_LOCATION_RESOURCE_WITH_ID = "/location-taxi/{geopointOrigin}";
+	
 }

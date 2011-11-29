@@ -3,7 +3,7 @@ package com.coctelmental.server.helpers;
 import java.util.List;
 
 import com.coctelmental.server.locations.TaxiLocationsStore;
-import com.coctelmental.server.model.MyGeoPoint;
+import com.coctelmental.server.model.GeoPointInfo;
 import com.coctelmental.server.model.TaxiDriverLocation;
 import com.coctelmental.server.model.TaxiLocation;
 
@@ -18,7 +18,7 @@ public class TaxiLocationHelper {
 		
 	}
 	
-	public List<TaxiLocation> getTaxiLocations(MyGeoPoint userLocation) {
+	public List<TaxiLocation> getTaxiLocations(GeoPointInfo userLocation) {
 		List<TaxiLocation> taxiLocations = null;
 		if (userLocation != null) {
 			taxiLocations = TaxiLocationsStore.getInstance().getTaxiLocations(userLocation);

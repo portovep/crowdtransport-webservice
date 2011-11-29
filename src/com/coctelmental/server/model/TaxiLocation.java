@@ -3,7 +3,7 @@ package com.coctelmental.server.model;
 public class TaxiLocation {
 
 	private String taxiDriverID;
-	private Location location;
+	private LocationInfo location;
 	
 	public String getTaxiDriverID() {
 		return taxiDriverID;
@@ -11,11 +11,12 @@ public class TaxiLocation {
 	public void setTaxiDriverID(String taxiDriverID) {
 		this.taxiDriverID = taxiDriverID;
 	}
-	public Location getLocation() {
+	public LocationInfo getLocation() {
 		return location;
 	}
-	public void setLocation(Location location) {
+	public void setLocation(LocationInfo location) {
 		this.location = location;
 	}
 	
 }
+

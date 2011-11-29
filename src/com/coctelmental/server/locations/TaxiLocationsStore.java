@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import com.coctelmental.server.model.MyGeoPoint;
-import com.coctelmental.server.model.Location;
+import com.coctelmental.server.model.GeoPointInfo;
+import com.coctelmental.server.model.LocationInfo;
 import com.coctelmental.server.model.TaxiDriverLocation;
 import com.coctelmental.server.model.TaxiLocation;
 import com.coctelmental.server.utils.Tools;
@@ -17,10 +17,10 @@ public class TaxiLocationsStore {
 	private static final long LOCATION_LIFE_TIME = 30000; // 1/2 minute
 	
 	private static TaxiLocationsStore singletonTaxiLocationsStore = new TaxiLocationsStore();
-	private HashMap<String, Location> taxiLocationsList;
+	private HashMap<String, LocationInfo> taxiLocationsList;
 	
 	private TaxiLocationsStore() {
-		taxiLocationsList = new HashMap<String, Location>();
+		taxiLocationsList = new HashMap<String, LocationInfo>();
 	}
 	
 	public static TaxiLocationsStore getInstance() {
@@ -32,7 +32,7 @@ public class TaxiLocationsStore {
 		
 		if (taxiDriverID != null && !taxiDriverID.isEmpty()) {
 			// create new location
-			Location location = new Location();
+			LocationInfo location = new LocationInfo();
 			location.setGeopoint(taxiDriverLocation.getGeopoint());
 			location.setWhen(System.currentTimeMillis());			
 							
@@ -47,14 +47,14 @@ public class TaxiLocationsStore {
 		}
 	}
 	
-	public List<TaxiLocation> getTaxiLocations(MyGeoPoint gpUserLocation) {
+	public List<TaxiLocation> getTaxiLocations(GeoPointInfo gpUserLocation) {
 		List<TaxiLocation> taxiLocations = new ArrayList<TaxiLocation>();
 		
 		synchronized (taxiLocationsList) {
 			Iterator<String> itr = taxiLocationsList.keySet().iterator();
 			while(itr.hasNext()) {
 				String taxiDriverID = itr.next();
-				Location location = taxiLocationsList.get(taxiDriverID);
+				LocationInfo location = taxiLocationsList.get(taxiDriverID);
 				if (!isOld(location)) {
 					// is near to user location?
 					if (isWithinRange(gpUserLocation, location.getGeopoint())) {
@@ -74,14 +74,14 @@ public class TaxiLocationsStore {
 		return taxiLocations;
 	}
 	
-	private boolean isWithinRange(MyGeoPoint gp1, MyGeoPoint gp2) {
+	private boolean isWithinRange(GeoPointInfo gp1, GeoPointInfo gp2) {
 		double distance = Tools.calculateDistance(gp1, gp2);
 		if (distance <= MAX_DISTANCE)
 			return true;
 		return false;
 	}
 
-	private boolean isOld(Location location) {
+	private boolean isOld(LocationInfo location) {
 		long diff = System.currentTimeMillis() - location.getWhen();
 		if (diff >= LOCATION_LIFE_TIME)
 			return true;

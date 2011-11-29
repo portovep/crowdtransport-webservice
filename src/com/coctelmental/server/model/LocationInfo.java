@@ -1,15 +1,15 @@
 package com.coctelmental.server.model;
 
-public class Location {
+public class LocationInfo {
 
-	private MyGeoPoint geopoint;
+	private GeoPointInfo geopoint;
 	private long when;
 	
-	public MyGeoPoint getGeopoint() {
+	public GeoPointInfo getGeopoint() {
 		return geopoint;
 	}
 
-	public void setGeopoint(MyGeoPoint geopoint) {
+	public void setGeopoint(GeoPointInfo geopoint) {
 		this.geopoint = geopoint;
 	}
 

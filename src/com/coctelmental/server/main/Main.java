@@ -60,6 +60,7 @@ public class Main extends Application {
 		router.attach(ResourceTemplates.LOCATION_RESOURCE, LocationResource.class);
 		router.attach(ResourceTemplates.LOCATION_RESOURCE_WITH_ID, LocationResource.class);
 		router.attach(ResourceTemplates.TAXI_LOCATION_RESOURCE, TaxiLocationResource.class);
+		router.attach(ResourceTemplates.TAXI_LOCATION_RESOURCE_WITH_ID, TaxiLocationResource.class);
 		return router;
 	}
 }
