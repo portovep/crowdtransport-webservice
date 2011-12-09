@@ -14,5 +14,6 @@ public interface ResourceTemplates {
 	public static final String LOCATION_RESOURCE_WITH_ID = "/location/{locationID}";
 	public static final String TAXI_LOCATION_RESOURCE = "/location-taxi";
 	public static final String TAXI_LOCATION_RESOURCE_WITH_ID = "/location-taxi/{geopointOrigin}";
+	public static final String C2DM_REGISTRATION_RESOURCE = "/c2dm-registration";
 	
 }

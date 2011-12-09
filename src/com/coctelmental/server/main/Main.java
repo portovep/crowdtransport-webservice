@@ -7,6 +7,7 @@ import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
 
 import com.coctelmental.server.resources.BusResource;
+import com.coctelmental.server.resources.C2DMResource;
 import com.coctelmental.server.resources.CityResource;
 import com.coctelmental.server.resources.LineResource;
 import com.coctelmental.server.resources.LocationResource;
@@ -61,6 +62,7 @@ public class Main extends Application {
 		router.attach(ResourceTemplates.LOCATION_RESOURCE_WITH_ID, LocationResource.class);
 		router.attach(ResourceTemplates.TAXI_LOCATION_RESOURCE, TaxiLocationResource.class);
 		router.attach(ResourceTemplates.TAXI_LOCATION_RESOURCE_WITH_ID, TaxiLocationResource.class);
+		router.attach(ResourceTemplates.C2DM_REGISTRATION_RESOURCE, C2DMResource.class);
 		return router;
 	}
 }
