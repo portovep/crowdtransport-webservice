@@ -2,9 +2,22 @@ package com.coctelmental.server.model;
 
 public class LocationInfo {
 
+	private String senderUUID;
 	private GeoPointInfo geopoint;
 	private long when;
 	
+	public LocationInfo (String senderUUID) {
+		this.senderUUID = senderUUID;
+	}
+	
+	public String getSenderUUID() {
+		return senderUUID;
+	}
+
+	public void setSenderUUID(String senderUUID) {
+		this.senderUUID = senderUUID;
+	}
+
 	public GeoPointInfo getGeopoint() {
 		return geopoint;
 	}

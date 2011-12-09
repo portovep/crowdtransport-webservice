@@ -32,7 +32,7 @@ public class TaxiLocationsStore {
 		
 		if (taxiDriverID != null && !taxiDriverID.isEmpty()) {
 			// create new location
-			LocationInfo location = new LocationInfo();
+			LocationInfo location = new LocationInfo(taxiDriverLocation.getTaxiDriverUUID());
 			location.setGeopoint(taxiDriverLocation.getGeopoint());
 			location.setWhen(System.currentTimeMillis());			
 							
@@ -59,8 +59,7 @@ public class TaxiLocationsStore {
 					// is near to user location?
 					if (isWithinRange(gpUserLocation, location.getGeopoint())) {
 						// build TaxiLocation
-						TaxiLocation taxiLocation = new TaxiLocation();
-						taxiLocation.setTaxiDriverID(taxiDriverID);
+						TaxiLocation taxiLocation = new TaxiLocation(taxiDriverID, location.getSenderUUID());
 						taxiLocation.setLocation(location);
 						// add to location list which will be sent to user
 						taxiLocations.add(taxiLocation);
