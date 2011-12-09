@@ -12,6 +12,7 @@ import com.coctelmental.server.resources.CityResource;
 import com.coctelmental.server.resources.LineResource;
 import com.coctelmental.server.resources.LocationResource;
 import com.coctelmental.server.resources.ResourceTemplates;
+import com.coctelmental.server.resources.ServiceRequestResource;
 import com.coctelmental.server.resources.TaxiLocationResource;
 import com.coctelmental.server.resources.TaxiResource;
 import com.coctelmental.server.resources.UserResource;
@@ -63,6 +64,8 @@ public class Main extends Application {
 		router.attach(ResourceTemplates.TAXI_LOCATION_RESOURCE, TaxiLocationResource.class);
 		router.attach(ResourceTemplates.TAXI_LOCATION_RESOURCE_WITH_ID, TaxiLocationResource.class);
 		router.attach(ResourceTemplates.C2DM_REGISTRATION_RESOURCE, C2DMResource.class);
+		router.attach(ResourceTemplates.SERVICE_REQUEST_RESOURCE, ServiceRequestResource.class);
+		router.attach(ResourceTemplates.SERVICE_REQUEST_RESOURCE_WITH_ID, ServiceRequestResource.class);
 		return router;
 	}
 }
