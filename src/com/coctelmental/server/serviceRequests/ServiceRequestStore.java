@@ -2,8 +2,8 @@ package com.coctelmental.server.serviceRequests;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-import com.coctelmental.server.helpers.ServiceRequestHelper;
 import com.coctelmental.server.model.ServiceRequestInfo;
 
 public class ServiceRequestStore {
@@ -20,7 +20,8 @@ public class ServiceRequestStore {
 		requests = new HashMap<String, ArrayList<ServiceRequestInfo>>();
 	}
 	
-	public synchronized void addServiceRequest(ServiceRequestInfo requestInfo)  {
+	public synchronized int addServiceRequest(ServiceRequestInfo requestInfo)  {
+		int result = 0; // result 0 = error
 		String taxiDriverUUID = requestInfo.getTaxiDriverUUID();
 		
 		System.out.println("New service request received");
@@ -49,9 +50,25 @@ public class ServiceRequestStore {
 				requests.put(taxiDriverUUID, requestList);
 			}
 			
-			// send push notification to taxi driver device
-			ServiceRequestHelper.sendTaxiNotification(taxiDriverUUID);	
+			result = 1;
 		}		
+		return result;
+	}
+
+	public synchronized ServiceRequestInfo getServiceRequest(String taxiDriverUUID, String requestID) {
+		ArrayList<ServiceRequestInfo> requestList = requests.get(taxiDriverUUID);
+		for(ServiceRequestInfo request : requestList) {
+			// looking for target request
+			if (request.getUserUUID().equals(requestID))
+				// TO-DO (Check timestamp)
+				return request;
+		}
+		return null;
+	}
+	
+	public synchronized List<ServiceRequestInfo> getAllServiceRequest(String taxiDriverUUID) {
+		// TO-DO (Check timestamp)
+		return requests.get(taxiDriverUUID);
 	}
 	
 	private int checkDuplicateRequest(String userID, ArrayList<ServiceRequestInfo> requestList) {
@@ -67,4 +84,6 @@ public class ServiceRequestStore {
 		}		
 		return result;
 	}
+	
+	
 }
