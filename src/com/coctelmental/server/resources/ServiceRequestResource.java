@@ -73,7 +73,7 @@ public class ServiceRequestResource extends ServerResource{
 			}				
 		}
 		else
-			getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 
 		return result; 
 	}
