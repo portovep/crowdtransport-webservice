@@ -66,6 +66,7 @@ public class Main extends Application {
 		router.attach(ResourceTemplates.C2DM_REGISTRATION_RESOURCE, C2DMResource.class);
 		router.attach(ResourceTemplates.SERVICE_REQUEST_RESOURCE, ServiceRequestResource.class);
 		router.attach(ResourceTemplates.SERVICE_REQUEST_RESOURCE_WITH_ID, ServiceRequestResource.class);
+		router.attach(ResourceTemplates.SERVICE_REQUEST_RESOURCE_WITH_REQUESTID, ServiceRequestResource.class);
 		return router;
 	}
 }
