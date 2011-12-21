@@ -54,7 +54,7 @@ public class ServiceRequestStore {
 		}		
 		return result;
 	}
-
+	
 	public synchronized ServiceRequestInfo getServiceRequest(String taxiDriverUUID, String requestID) {
 		ArrayList<ServiceRequestInfo> requestList = requests.get(taxiDriverUUID);
 		for(ServiceRequestInfo request : requestList) {
@@ -69,6 +69,18 @@ public class ServiceRequestStore {
 	public synchronized List<ServiceRequestInfo> getAllServiceRequest(String taxiDriverUUID) {
 		// TO-DO (Check timestamp)
 		return requests.get(taxiDriverUUID);
+	}
+	
+	public synchronized boolean cancelServiceRequest(String taxiDriverUUID, String requestID) {
+		ArrayList<ServiceRequestInfo> requestList = requests.get(taxiDriverUUID);
+		for(ServiceRequestInfo request : requestList) {
+			// looking for target request
+			if (request.getUserUUID().equals(requestID))
+				// remove request
+				requestList.remove(request);
+				return true;
+		}
+		return false;
 	}
 	
 	private int checkDuplicateRequest(String userID, ArrayList<ServiceRequestInfo> requestList) {

@@ -36,6 +36,10 @@ public class ServiceRequestHelper {
 		return null;
 	}
 	
+	public static boolean cancelServiceRequest(String taxiDriverUUID, String requestID) {
+		return ServiceRequestStore.getInstance().cancelServiceRequest(taxiDriverUUID, requestID);
+	}
+	
 	private static void sendTaxiNotification(String taxiDriverUUID, String payloadData) {
 		// get registrationID for taxi driver device
 		String registrationID = DeviceInfoStore.getInstance().getRegistrationID(taxiDriverUUID);

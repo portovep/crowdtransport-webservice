@@ -8,6 +8,7 @@ import java.util.List;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
@@ -47,7 +48,7 @@ public class ServiceRequestResource extends ServerResource{
 	}
 	
 	@Get("json")
-	public Representation getServiceRequest(){	
+	public Representation getServiceRequestJSON(){	
 		JsonRepresentation result = null;
 		if (taxiUUID != null) {
 			if (requestID != null) {
@@ -78,13 +79,27 @@ public class ServiceRequestResource extends ServerResource{
 		return result; 
 	}
 	
+	@Delete("json")
+	public Representation cancelServiceRequestJSON(){	
+		if (taxiUUID != null && requestID != null) {
+			// cancel target service request
+			boolean canceled = ServiceRequestHelper.cancelServiceRequest(taxiUUID, requestID);
+			if (!canceled) {
+				getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+			}			
+		}
+		else
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		return null; 
+	}
+	
 	@Put("json")
 	public Representation putServiceRequestJSON(Representation representation){
 		try{
 			JsonRepresentation jsonRepresentation = new JsonRepresentation(representation);
 			ServiceRequestInfo serviceRequest = JsonHandler.fromJson(jsonRepresentation.getText(), ServiceRequestInfo.class);
 			if (serviceRequest == null)
-				getResponse().setStatus(Status.CLIENT_ERROR_CONFLICT);	
+				getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);	
 			else 
 				ServiceRequestHelper.addServiceRequest(serviceRequest);
 		}catch(Exception ioe){
