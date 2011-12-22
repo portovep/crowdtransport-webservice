@@ -71,7 +71,7 @@ public class ServiceRequestStore {
 		return requests.get(taxiDriverUUID);
 	}
 	
-	public synchronized boolean cancelServiceRequest(String taxiDriverUUID, String requestID) {
+	public synchronized boolean removeServiceRequest(String taxiDriverUUID, String requestID) {
 		ArrayList<ServiceRequestInfo> requestList = requests.get(taxiDriverUUID);
 		for(ServiceRequestInfo request : requestList) {
 			// looking for target request
