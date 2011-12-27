@@ -57,11 +57,13 @@ public class ServiceRequestStore {
 	
 	public synchronized ServiceRequestInfo getServiceRequest(String taxiDriverUUID, String requestID) {
 		ArrayList<ServiceRequestInfo> requestList = requests.get(taxiDriverUUID);
-		for(ServiceRequestInfo request : requestList) {
-			// looking for target request
-			if (request.getUserUUID().equals(requestID))
-				// TO-DO (Check timestamp)
-				return request;
+		if (requestList != null && !requestList.isEmpty()) {
+			for(ServiceRequestInfo request : requestList) {
+				// looking for target request
+				if (request.getUserUUID().equals(requestID))
+					// TO-DO (Check timestamp)
+					return request;
+			}
 		}
 		return null;
 	}
@@ -73,12 +75,14 @@ public class ServiceRequestStore {
 	
 	public synchronized boolean removeServiceRequest(String taxiDriverUUID, String requestID) {
 		ArrayList<ServiceRequestInfo> requestList = requests.get(taxiDriverUUID);
-		for(ServiceRequestInfo request : requestList) {
-			// looking for target request
-			if (request.getUserUUID().equals(requestID))
-				// remove request
-				requestList.remove(request);
-				return true;
+		if (requestList != null && !requestList.isEmpty()) {
+			for(ServiceRequestInfo request : requestList) {
+				// looking for target request
+				if (request.getUserUUID().equals(requestID))
+					// remove request
+					requestList.remove(request);
+					return true;
+			}
 		}
 		return false;
 	}
