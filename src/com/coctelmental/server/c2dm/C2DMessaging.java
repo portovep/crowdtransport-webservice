@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -27,6 +29,61 @@ public class C2DMessaging {
 			builder.append("&collapse_key=").append(messageKey);
 			builder.append("&data.").append(messageKey).append("=");
 			builder.append(URLEncoder.encode(messageData, ENCODING));
+	
+			byte[] requestData = builder.toString().getBytes(ENCODING);
+		
+			// setup connection
+			URL url = new URL(GOOGLE_SERVICE_URI);
+			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setUseCaches(false);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+			conn.setRequestProperty("Content-Length", Integer.toString(requestData.length));
+			conn.setRequestProperty("Authorization", "GoogleLogin auth=" + auth_token);
+			// to avoid certificate exceptions with untrusted SSL certificates
+			conn.setHostnameVerifier(new CustomizedHostnameVerifier());
+		
+			// send data
+			OutputStream out = conn.getOutputStream();
+			out.write(requestData);
+			out.close();
+			
+			// get response code
+			responseCode = conn.getResponseCode();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			
+			String response = "";
+			String line = null;
+			while ((line = reader.readLine()) != null){
+				response = response + line;
+			}
+			
+			System.err.println("C2DM - " + response);
+		}catch (Exception e) {
+			System.err.println("C2DM - Error sending message to google server.");
+			e.printStackTrace();
+		}
+		return responseCode;
+	}
+	
+	public static int sendMessages(String auth_token, String registrationId, String collapseKey, Map<String, String> messages) {
+
+		int responseCode = HttpURLConnection.HTTP_UNAVAILABLE;
+		
+		try{
+			// build POST request
+			StringBuilder builder = new StringBuilder();
+			builder.append("registration_id=").append(registrationId);
+			builder.append("&collapse_key=").append(collapseKey);
+			// attach data
+			Iterator<String> itr = messages.keySet().iterator();
+			while (itr.hasNext()) {
+				String messageKey = itr.next();
+				String messageData = messages.get(messageKey);
+				builder.append("&data.").append(messageKey).append("=");
+				builder.append(URLEncoder.encode(messageData, ENCODING));
+			}
 	
 			byte[] requestData = builder.toString().getBytes(ENCODING);
 		
