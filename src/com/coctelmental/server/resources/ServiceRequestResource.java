@@ -81,12 +81,18 @@ public class ServiceRequestResource extends ServerResource{
 	
 	@Delete("json")
 	public Representation cancelServiceRequestJSON(){	
-		if (taxiUUID != null && requestID != null) {
-			// cancel target service request
-			boolean canceled = ServiceRequestHelper.cancelServiceRequest(taxiUUID, requestID);
-			if (!canceled) {
-				getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
-			}			
+		if (taxiUUID != null) {
+			if(requestID != null) {
+				// cancel target service request
+				boolean canceled = ServiceRequestHelper.cancelServiceRequest(taxiUUID, requestID);
+				if (!canceled) {
+					getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+				}
+			}
+			else {
+				// cancel all request for given taxi driver
+				ServiceRequestHelper.rejectAllServiceRequest(taxiUUID);
+			}
 		}
 		else
 			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);

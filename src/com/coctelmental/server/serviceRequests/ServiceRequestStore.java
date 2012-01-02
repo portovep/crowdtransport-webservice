@@ -2,6 +2,7 @@ package com.coctelmental.server.serviceRequests;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import com.coctelmental.server.model.ServiceRequestInfo;
@@ -72,19 +73,37 @@ public class ServiceRequestStore {
 		// TO-DO (Check timestamp)
 		return requests.get(taxiDriverUUID);
 	}
-	
+
 	public synchronized boolean removeServiceRequest(String taxiDriverUUID, String requestID) {
 		ArrayList<ServiceRequestInfo> requestList = requests.get(taxiDriverUUID);
 		if (requestList != null && !requestList.isEmpty()) {
-			for(ServiceRequestInfo request : requestList) {
+			Iterator<ServiceRequestInfo> itr = requestList.iterator();
+			while (itr.hasNext()) {
+				ServiceRequestInfo request = itr.next(); 
 				// looking for target request
 				if (request.getUserUUID().equals(requestID))
 					// remove request
-					requestList.remove(request);
+					itr.remove(); // avoid ConcurrentModificationException
 					return true;
 			}
 		}
 		return false;
+	}
+	
+	public synchronized List<String> removeAllServiceRequest(String taxiDriverUUID) {
+		List<String> usersUUIDs = new ArrayList<String>();
+		ArrayList<ServiceRequestInfo> requestList = requests.get(taxiDriverUUID);
+		if (requestList != null && !requestList.isEmpty()) {
+			Iterator<ServiceRequestInfo> itr = requestList.iterator();
+			while (itr.hasNext()) {
+				ServiceRequestInfo request = itr.next();
+				// save user UUID for push notification
+				usersUUIDs.add(request.getUserUUID());
+				// remove request
+				itr.remove(); // avoid ConcurrentModificationException
+			}
+		}
+		return usersUUIDs;
 	}
 	
 	private int checkDuplicateRequest(String userID, ArrayList<ServiceRequestInfo> requestList) {

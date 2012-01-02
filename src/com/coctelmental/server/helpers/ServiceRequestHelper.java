@@ -17,6 +17,7 @@ public class ServiceRequestHelper {
 	private static final String USER_NOTIFICATION_PAYLOAD = "notify_user";
 	
 	private static final String USER_PAYLOAD_ACCEPT = "accept";
+	private static final String USER_PAYLOAD_CANCEL = "cancel";
 	
 	public static void addServiceRequest(ServiceRequestInfo serviceRequest) {
 		int result = ServiceRequestStore.getInstance().addServiceRequest(serviceRequest);
@@ -45,6 +46,18 @@ public class ServiceRequestHelper {
 	public static boolean cancelServiceRequest(String taxiDriverUUID, String requestID) {
 		return ServiceRequestStore.getInstance().removeServiceRequest(taxiDriverUUID, requestID);
 	}
+	
+	public static void rejectAllServiceRequest(String taxiDriverUUID) {
+		// remove all request associated with target taxi driver 
+		List<String> usersUUIDs = ServiceRequestStore.getInstance().removeAllServiceRequest(taxiDriverUUID);
+		// notify cancellation to users
+		for(String userUUID : usersUUIDs) {
+			int responseCode = sendUserNotification(userUUID, USER_PAYLOAD_CANCEL);
+			if (responseCode != HttpURLConnection.HTTP_OK) {
+				// TO-DO
+			}
+		}
+	}
 
 	public static int acceptServiceRequest(String requestID, String taxiDriverUUID) {
 		int result = -1;
@@ -55,9 +68,11 @@ public class ServiceRequestHelper {
 			// notify user
 			int responseCode = sendUserNotification(userUUID, USER_PAYLOAD_ACCEPT);
 			if (responseCode == HttpURLConnection.HTTP_OK) {
-				// cancel request
-				boolean canceled = ServiceRequestHelper.cancelServiceRequest(taxiDriverUUID, requestID);
-				if (canceled) {
+				// remove accepted request
+				boolean removed = ServiceRequestStore.getInstance().removeServiceRequest(taxiDriverUUID, requestID);
+				if (removed) {
+					// cancel other request
+					rejectAllServiceRequest(taxiDriverUUID);
 					result = 0;
 				}
 			}
