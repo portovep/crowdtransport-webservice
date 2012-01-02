@@ -28,9 +28,10 @@ public class ServiceRequestStore {
 		System.out.println("New service request received");
 		
 		if (taxiDriverUUID != null) {
+			ArrayList<ServiceRequestInfo> requestList = null;
 			if (requests.containsKey(taxiDriverUUID)) {
 				// get service request list for specific taxi driver
-				ArrayList<ServiceRequestInfo> requestList = requests.get(taxiDriverUUID);
+				requestList = requests.get(taxiDriverUUID);
 				
 				// looking for duplicate request
 				String userID = requestInfo.getUserID();
@@ -44,14 +45,14 @@ public class ServiceRequestStore {
 			}
 			else {
 				// create new request's for those taxi driver
-				ArrayList<ServiceRequestInfo> requestList = new ArrayList<ServiceRequestInfo>();
+				requestList = new ArrayList<ServiceRequestInfo>();
 				// store request
 				requestList.add(requestInfo);
 				// create new entry in hashmap
 				requests.put(taxiDriverUUID, requestList);
 			}
-			
-			result = 1;
+			// return number of requests
+			result = requestList.size();
 		}		
 		return result;
 	}

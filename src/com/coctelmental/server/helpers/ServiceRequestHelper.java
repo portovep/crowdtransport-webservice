@@ -1,6 +1,7 @@
 package com.coctelmental.server.helpers;
 
 import java.net.HttpURLConnection;
+import java.util.HashMap;
 import java.util.List;
 
 import com.coctelmental.server.c2dm.C2DMAuthentication;
@@ -14,18 +15,22 @@ public class ServiceRequestHelper {
 	public static final int E_REQUEST_NOT_FOUND = -2;
 	
 	private static final String TAXI_NOTIFICATION_PAYLOAD = "notify_taxiDriver";
+	private static final String TAXI_NUMBER_REQUESTS_PAYLOAD = "taxiDriver_number_requests";
 	private static final String USER_NOTIFICATION_PAYLOAD = "notify_user";
 	
 	private static final String USER_PAYLOAD_ACCEPT = "accept";
 	private static final String USER_PAYLOAD_CANCEL = "cancel";
 	
 	public static void addServiceRequest(ServiceRequestInfo serviceRequest) {
-		int result = ServiceRequestStore.getInstance().addServiceRequest(serviceRequest);
-		if (result == 1) {
+		int numberOfRequests = ServiceRequestStore.getInstance().addServiceRequest(serviceRequest);
+		if (numberOfRequests > 0) {
+			// no error
 			// send push notification to taxi driver device
-			// payloadData = serviceRequestID
-			String serviceRequestID = serviceRequest.getUserUUID();
-			sendTaxiNotification(serviceRequest.getTaxiDriverUUID(), serviceRequestID);
+			// payloadData = serviceRequestID 
+			
+			//TO-DO -> payload
+			String payloadData = serviceRequest.getUserID();
+			sendTaxiNotification(serviceRequest.getTaxiDriverUUID(), payloadData, String.valueOf(numberOfRequests));
 		}
 		else {
 			// TO-DO
@@ -81,7 +86,7 @@ public class ServiceRequestHelper {
 		return result;
 	}
 	
-	private static void sendTaxiNotification(String taxiDriverUUID, String payloadData) {
+	private static void sendTaxiNotification(String taxiDriverUUID, String requestData, String nRequests) {
 		// get registrationID for taxi driver device
 		String registrationID = DeviceInfoStore.getInstance().getRegistrationID(taxiDriverUUID);
 		
@@ -93,7 +98,11 @@ public class ServiceRequestHelper {
 			// send message to Google server
 			int resultCode = -1;
 			if (authToken != null && !authToken.isEmpty()) {
-				resultCode = C2DMessaging.sendMessage(authToken, registrationID, TAXI_NOTIFICATION_PAYLOAD, payloadData);
+				// attach data
+				HashMap<String, String> messages = new HashMap<String, String>();
+				messages.put(TAXI_NOTIFICATION_PAYLOAD, requestData);
+				messages.put(TAXI_NUMBER_REQUESTS_PAYLOAD, nRequests);
+				resultCode = C2DMessaging.sendMessages(authToken, registrationID, TAXI_NOTIFICATION_PAYLOAD, messages);
 				System.out.println("C2DM Taxi notification sent. Result code -> " + resultCode);
 			}
 		}
