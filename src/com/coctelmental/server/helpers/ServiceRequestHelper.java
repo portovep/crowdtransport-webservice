@@ -14,23 +14,32 @@ public class ServiceRequestHelper {
 	
 	public static final int E_REQUEST_NOT_FOUND = -2;
 	
-	private static final String TAXI_NOTIFICATION_PAYLOAD = "notify_taxiDriver";
+	// TAXI DRIVER PAYLOADS
+	private static final String TAXI_ADDRESS_FROM_PAYLOAD = "notification_addressFrom_name";
+	private static final String TAXI_ADDRESS_TO_PAYLOAD = "notification_addressTo_name";
+	private static final String TAXI_COMMENT_PAYLOAD = "notification_commnet";
 	private static final String TAXI_NUMBER_REQUESTS_PAYLOAD = "taxiDriver_number_requests";
-	private static final String USER_NOTIFICATION_PAYLOAD = "notify_user";
 	
+	// USER PAYLOADS
+	private static final String USER_NOTIFICATION_PAYLOAD = "notify_user";	
 	private static final String USER_PAYLOAD_ACCEPT = "accept";
 	private static final String USER_PAYLOAD_CANCEL = "cancel";
 	
 	public static void addServiceRequest(ServiceRequestInfo serviceRequest) {
 		int numberOfRequests = ServiceRequestStore.getInstance().addServiceRequest(serviceRequest);
 		if (numberOfRequests > 0) {
-			// no error
-			// send push notification to taxi driver device
-			// payloadData = serviceRequestID 
-			
-			//TO-DO -> payload
-			String payloadData = serviceRequest.getUserID();
-			sendTaxiNotification(serviceRequest.getTaxiDriverUUID(), payloadData, String.valueOf(numberOfRequests));
+			// no error, send push notification to taxi driver device
+			// attach address names and request commentary as payload data
+			String addressFrom = serviceRequest.getAddressFrom();
+			if(addressFrom == null)
+				addressFrom = "";
+			String addressTo = serviceRequest.getAddressTo();
+			if(addressTo == null)
+				addressTo = "";
+			String comment = serviceRequest.getComment();
+			if(comment == null)
+				comment = "";
+			sendTaxiNotification(serviceRequest.getTaxiDriverUUID(), addressFrom, addressTo, comment, String.valueOf(numberOfRequests));
 		}
 		else {
 			// TO-DO
@@ -86,7 +95,7 @@ public class ServiceRequestHelper {
 		return result;
 	}
 	
-	private static void sendTaxiNotification(String taxiDriverUUID, String requestData, String nRequests) {
+	private static void sendTaxiNotification(String taxiDriverUUID, String addressFrom, String addressTo, String comment, String nRequests) {
 		// get registrationID for taxi driver device
 		String registrationID = DeviceInfoStore.getInstance().getRegistrationID(taxiDriverUUID);
 		
@@ -100,9 +109,11 @@ public class ServiceRequestHelper {
 			if (authToken != null && !authToken.isEmpty()) {
 				// attach data
 				HashMap<String, String> messages = new HashMap<String, String>();
-				messages.put(TAXI_NOTIFICATION_PAYLOAD, requestData);
+				messages.put(TAXI_ADDRESS_FROM_PAYLOAD, addressFrom);
+				messages.put(TAXI_ADDRESS_TO_PAYLOAD, addressTo);
+				messages.put(TAXI_COMMENT_PAYLOAD, comment);
 				messages.put(TAXI_NUMBER_REQUESTS_PAYLOAD, nRequests);
-				resultCode = C2DMessaging.sendMessages(authToken, registrationID, TAXI_NOTIFICATION_PAYLOAD, messages);
+				resultCode = C2DMessaging.sendMessages(authToken, registrationID, TAXI_ADDRESS_FROM_PAYLOAD, messages);
 				System.out.println("C2DM Taxi notification sent. Result code -> " + resultCode);
 			}
 		}
