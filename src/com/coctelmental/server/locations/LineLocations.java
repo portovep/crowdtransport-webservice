@@ -8,6 +8,7 @@ import java.util.List;
 import com.coctelmental.server.model.BusLocation;
 import com.coctelmental.server.model.CollaboratorBusLocation;
 import com.coctelmental.server.model.StoredBusLocation;
+import com.coctelmental.server.utils.Tools;
 
 public class LineLocations {
 	
@@ -120,48 +121,13 @@ public class LineLocations {
 	}
 	
 	private boolean isNear(StoredBusLocation fromGP, CollaboratorBusLocation toGP) {
-		Double distance = calculateDistance(fromGP.getLatitude(), fromGP.getLongitude(), 
-				toGP.getGeopoint().getLatitudeE6(), toGP.getGeopoint().getLongitudeE6());
+		Double distance = Tools.calculateDistance(fromGP.getGeopoint(), toGP.getGeopoint());
 		
 		System.out.println("Log: Distance: " + distance+ "m");
 		
 		if (distance >= MAX_DISTANCE_IN_METERS)
 			return false;
 		return true;
-	}
-	
-	private static double calculateDistance(double rlat1, double rlong1, double rlat2, double rlong2) {
-		/*
-		Haversine formula:
-		
-		a = sin²(Δlat/2) + cos(lat1).cos(lat2).sin²(Δlong/2)
-		c = 2.atan2(√a, √(1−a))
-		distance = R.c
-		
-		*/
-		final double radious = 6371000; // earth radious in meters
-		
-		double lat1 = rlat1 / 1E6;
-		double lat2 = rlat2 / 1E6;
-		
-		double long1 = rlong1 / 1E6;
-		double long2 = rlong2 / 1E6;
-		
-		// calculate Δlat and Δlong in radians
-		double dLat = Math.toRadians(lat2 - lat1);
-		double dLong = Math.toRadians(long2 - long1);
-		
-		// calculate a
-		double a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
-					Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * 
-					Math.sin(dLong/2) * Math.sin(dLong/2);
-		
-		// calculate c
-		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-		
-		// calculate distance
-		double distance = radious * c;
-		return distance;
 	}
 	
 	private void mergeWithStoredBusLocation(Integer busLocationID, CollaboratorBusLocation receivedBusLocation) {
@@ -173,16 +139,15 @@ public class LineLocations {
 	
 	private StoredBusLocation createStoredBusLocation(Integer id, CollaboratorBusLocation receivedBusLocation) {
 		StoredBusLocation sbl = new StoredBusLocation(id);
-		sbl.setLatitude(receivedBusLocation.getGeopoint().getLatitudeE6());
-		sbl.setLongitude(receivedBusLocation.getGeopoint().getLongitudeE6());
+		sbl.setGeopoint(receivedBusLocation.getGeopoint());
 		sbl.setWhenStored(System.currentTimeMillis());
 		return sbl;
 	}
 	
 	private BusLocation createBusLocation(StoredBusLocation storedBusLocation) {
 		BusLocation busLocation = new BusLocation(Integer.toString(storedBusLocation.getBusLocationID()));
-		busLocation.setLatitude(storedBusLocation.getLatitude());
-		busLocation.setLongitude(storedBusLocation.getLongitude());
+		busLocation.setLatitude(storedBusLocation.getGeopoint().getLatitudeE6());
+		busLocation.setLongitude(storedBusLocation.getGeopoint().getLongitudeE6());
 		busLocation.setWhen(storedBusLocation.getWhenStored());
 		return busLocation;
 	}

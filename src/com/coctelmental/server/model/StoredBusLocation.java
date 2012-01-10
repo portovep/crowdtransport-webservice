@@ -4,8 +4,7 @@ package com.coctelmental.server.model;
 public class StoredBusLocation {
 
 	private int busLocationID;
-	private int latitude;
-	private int longitude;
+	private GeoPointInfo geopoint;
 	private long whenStored;
 	
 	public StoredBusLocation (int id) {
@@ -20,28 +19,20 @@ public class StoredBusLocation {
 		this.busLocationID = busLocationID;
 	}
 
+	public GeoPointInfo getGeopoint() {
+		return geopoint;
+	}
+
+	public void setGeopoint(GeoPointInfo geopoint) {
+		this.geopoint = geopoint;
+	}
+	
 	public long getWhenStored() {
 		return whenStored;
 	}
 
 	public void setWhenStored(long whenStored) {
 		this.whenStored = whenStored;
-	}
-
-	public int getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(int latitude) {
-		this.latitude = latitude;
-	}
-
-	public int getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(int longitude) {
-		this.longitude = longitude;
 	}
 	
 }
