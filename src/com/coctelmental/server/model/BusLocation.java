@@ -1,6 +1,5 @@
 package com.coctelmental.server.model;
 
-import com.coctelmental.server.utils.JsonHandler;
 
 public class BusLocation {
 
@@ -52,18 +51,6 @@ public class BusLocation {
 
 	public void setnCollaborators(int nCollaborators) {
 		this.nCollaborators = nCollaborators;
-	}
-
-	public String toString() {
-		return String.format("busLocationID: %s\n" +
-							 "latitude: %s\n" +
-							 "longitude: %s\n" +
-							 "when: %s\n" +
-							 "nCollaborators: %s", busLocationID, latitude, longitude, when, nCollaborators);
-	}
-
-	public String toJson() {
-		return JsonHandler.toJson(this);	
 	}
 	
 }

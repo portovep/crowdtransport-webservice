@@ -1,8 +1,5 @@
 package com.coctelmental.server.model;
 
-import com.coctelmental.server.utils.JsonHandler;
-
-
 
 public class BusDriver {
 
@@ -73,15 +70,5 @@ public class BusDriver {
 		return companyAuthCode;
 	}
 	
-	public String toString() {
-		return String.format("dni: %s\n" +
-							 "fullName: %s\n" +
-							 "email: %s\n" +
-							 "companyCIF: %s", dni, fullName, email, companyCIF);
-	}
-
-	public String toJson() {
-		return JsonHandler.toJson(this);	
-	}	
 		
 }

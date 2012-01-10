@@ -42,7 +42,7 @@ public class TaxiResource extends ServerResource {
 			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 		}
 		else {
-			result = new JsonRepresentation(taxiDriver.toJson());
+			result = new JsonRepresentation(JsonHandler.toJson(taxiDriver));
 		}
 		return result;
 	}

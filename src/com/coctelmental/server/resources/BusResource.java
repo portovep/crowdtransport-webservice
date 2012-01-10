@@ -42,7 +42,7 @@ public class BusResource extends ServerResource {
 			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 		}
 		else {
-			result = new JsonRepresentation(busDriver.toJson());
+			result = new JsonRepresentation(JsonHandler.toJson(busDriver));
 		}
 		return result;
 	}
