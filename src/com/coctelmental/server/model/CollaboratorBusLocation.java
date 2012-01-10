@@ -4,8 +4,7 @@ package com.coctelmental.server.model;
 public class CollaboratorBusLocation {
 
 	private String userID;
-	private int latitude;
-	private int longitude;
+	private GeoPointInfo geopoint;
 
 	public CollaboratorBusLocation (String id) {
 		this.userID = id;
@@ -19,20 +18,12 @@ public class CollaboratorBusLocation {
 		return userID;
 	}
 
-	public int getLatitude() {
-		return latitude;
+	public GeoPointInfo getGeopoint() {
+		return geopoint;
 	}
 
-	public void setLatitude(int latitude) {
-		this.latitude = latitude;
-	}
-
-	public void setLongitude(int longitude) {
-		this.longitude = longitude;
-	}
-	
-	public int getLongitude() {
-		return longitude;
+	public void setGeopoint(GeoPointInfo geopoint) {
+		this.geopoint = geopoint;
 	}
 
 }

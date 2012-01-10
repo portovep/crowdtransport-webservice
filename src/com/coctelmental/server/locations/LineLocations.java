@@ -121,7 +121,7 @@ public class LineLocations {
 	
 	private boolean isNear(StoredBusLocation fromGP, CollaboratorBusLocation toGP) {
 		Double distance = calculateDistance(fromGP.getLatitude(), fromGP.getLongitude(), 
-				toGP.getLatitude(), toGP.getLongitude());
+				toGP.getGeopoint().getLatitudeE6(), toGP.getGeopoint().getLongitudeE6());
 		
 		System.out.println("Log: Distance: " + distance+ "m");
 		
@@ -173,8 +173,8 @@ public class LineLocations {
 	
 	private StoredBusLocation createStoredBusLocation(Integer id, CollaboratorBusLocation receivedBusLocation) {
 		StoredBusLocation sbl = new StoredBusLocation(id);
-		sbl.setLatitude(receivedBusLocation.getLatitude());
-		sbl.setLongitude(receivedBusLocation.getLongitude());
+		sbl.setLatitude(receivedBusLocation.getGeopoint().getLatitudeE6());
+		sbl.setLongitude(receivedBusLocation.getGeopoint().getLongitudeE6());
 		sbl.setWhenStored(System.currentTimeMillis());
 		return sbl;
 	}
