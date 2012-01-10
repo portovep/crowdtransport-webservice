@@ -146,8 +146,7 @@ public class LineLocations {
 	
 	private BusLocation createBusLocation(StoredBusLocation storedBusLocation) {
 		BusLocation busLocation = new BusLocation(Integer.toString(storedBusLocation.getBusLocationID()));
-		busLocation.setLatitude(storedBusLocation.getGeopoint().getLatitudeE6());
-		busLocation.setLongitude(storedBusLocation.getGeopoint().getLongitudeE6());
+		busLocation.setGeopoint(storedBusLocation.getGeopoint());
 		busLocation.setWhen(storedBusLocation.getWhenStored());
 		return busLocation;
 	}

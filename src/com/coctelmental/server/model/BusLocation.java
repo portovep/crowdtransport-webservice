@@ -4,8 +4,7 @@ package com.coctelmental.server.model;
 public class BusLocation {
 
 	private String busLocationID;
-	private int latitude;
-	private int longitude;
+	private GeoPointInfo geopoint;
 	private long when;
 	private int nCollaborators;
 	
@@ -20,21 +19,13 @@ public class BusLocation {
 	public void setBusLocationID(String busLocationID) {
 		this.busLocationID = busLocationID;
 	}
-
-	public int getLatitude() {
-		return latitude;
+	
+	public GeoPointInfo getGeopoint() {
+		return geopoint;
 	}
 
-	public void setLatitude(int latitude) {
-		this.latitude = latitude;
-	}
-
-	public int getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(int longitude) {
-		this.longitude = longitude;
+	public void setGeopoint(GeoPointInfo geopoint) {
+		this.geopoint = geopoint;
 	}
 	
 	public long getWhen() {
