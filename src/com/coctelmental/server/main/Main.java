@@ -9,7 +9,7 @@ import org.restlet.routing.Router;
 import com.coctelmental.server.resources.BusResource;
 import com.coctelmental.server.resources.C2DMResource;
 import com.coctelmental.server.resources.CityResource;
-import com.coctelmental.server.resources.ConfirmationRequestResource;
+import com.coctelmental.server.resources.ServiceRequestResponseResource;
 import com.coctelmental.server.resources.LineResource;
 import com.coctelmental.server.resources.LocationResource;
 import com.coctelmental.server.resources.ResourceTemplates;
@@ -68,7 +68,7 @@ public class Main extends Application {
 		router.attach(ResourceTemplates.SERVICE_REQUEST_RESOURCE, ServiceRequestResource.class);
 		router.attach(ResourceTemplates.SERVICE_REQUEST_RESOURCE_WITH_ID, ServiceRequestResource.class);
 		router.attach(ResourceTemplates.SERVICE_REQUEST_RESOURCE_WITH_REQUESTID, ServiceRequestResource.class);
-		router.attach(ResourceTemplates.CONFIRMATION_REQUEST_RESOURCE, ConfirmationRequestResource.class);
+		router.attach(ResourceTemplates.SERVICE_REQUEST_RESPONSE_RESOURCE, ServiceRequestResponseResource.class);
 		return router;
 	}
 }

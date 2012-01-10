@@ -56,22 +56,6 @@ public class ServiceRequestHelper {
 			return serviceRequests;
 		return null;
 	}
-	
-	public static boolean cancelServiceRequest(String taxiDriverUUID, String requestID) {
-		return ServiceRequestStore.getInstance().removeServiceRequest(taxiDriverUUID, requestID);
-	}
-	
-	public static void rejectAllServiceRequest(String taxiDriverUUID) {
-		// remove all request associated with target taxi driver 
-		List<String> usersUUIDs = ServiceRequestStore.getInstance().removeAllServiceRequest(taxiDriverUUID);
-		// notify cancellation to users
-		for(String userUUID : usersUUIDs) {
-			int responseCode = sendUserNotification(userUUID, USER_PAYLOAD_CANCEL);
-			if (responseCode != HttpURLConnection.HTTP_OK) {
-				// TO-DO
-			}
-		}
-	}
 
 	public static int acceptServiceRequest(String requestID, String taxiDriverUUID) {
 		int result = -1;
@@ -86,13 +70,29 @@ public class ServiceRequestHelper {
 				boolean removed = ServiceRequestStore.getInstance().removeServiceRequest(taxiDriverUUID, requestID);
 				if (removed) {
 					// cancel other request
-					rejectAllServiceRequest(taxiDriverUUID);
+					cancelAllServiceRequest(taxiDriverUUID);
 					result = 0;
 				}
 			}
 		}
 		
 		return result;
+	}
+	
+	public static boolean cancelServiceRequest(String taxiDriverUUID, String requestID) {
+		return ServiceRequestStore.getInstance().removeServiceRequest(taxiDriverUUID, requestID);
+	}
+	
+	public static void cancelAllServiceRequest(String taxiDriverUUID) {
+		// remove all request associated with target taxi driver 
+		List<String> usersUUIDs = ServiceRequestStore.getInstance().removeAllServiceRequest(taxiDriverUUID);
+		// notify cancellation to users
+		for(String userUUID : usersUUIDs) {
+			int responseCode = sendUserNotification(userUUID, USER_PAYLOAD_CANCEL);
+			if (responseCode != HttpURLConnection.HTTP_OK) {
+				// TO-DO
+			}
+		}
 	}
 	
 	private static void sendTaxiNotification(String taxiDriverUUID, String addressFrom, String addressTo, String comment, String nRequests) {

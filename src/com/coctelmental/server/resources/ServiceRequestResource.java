@@ -79,26 +79,6 @@ public class ServiceRequestResource extends ServerResource{
 		return result; 
 	}
 	
-	@Delete("json")
-	public Representation cancelServiceRequestJSON(){	
-		if (taxiUUID != null) {
-			if(requestID != null) {
-				// cancel target service request
-				boolean canceled = ServiceRequestHelper.cancelServiceRequest(taxiUUID, requestID);
-				if (!canceled) {
-					getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
-				}
-			}
-			else {
-				// cancel all request for given taxi driver
-				ServiceRequestHelper.rejectAllServiceRequest(taxiUUID);
-			}
-		}
-		else
-			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-		return null; 
-	}
-	
 	@Put("json")
 	public Representation putServiceRequestJSON(Representation representation){
 		try{
@@ -113,6 +93,26 @@ public class ServiceRequestResource extends ServerResource{
 			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 		}
 		return null;
+	}
+	
+	@Delete("json")
+	public Representation cancelServiceRequestJSON(){	
+		if (taxiUUID != null) {
+			if(requestID != null) {
+				// cancel target service request
+				boolean canceled = ServiceRequestHelper.cancelServiceRequest(taxiUUID, requestID);
+				if (!canceled) {
+					getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+				}
+			}
+			else {
+				// cancel all request for given taxi driver
+				ServiceRequestHelper.cancelAllServiceRequest(taxiUUID);
+			}
+		}
+		else
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+		return null; 
 	}
 	
 }

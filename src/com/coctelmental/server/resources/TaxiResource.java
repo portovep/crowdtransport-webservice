@@ -6,7 +6,6 @@ import java.net.URLDecoder;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
@@ -35,7 +34,7 @@ public class TaxiResource extends ServerResource {
 	}
 	
 	@Get("json")
-	public Representation getUserJSON(){	
+	public Representation getTaxiDriverJSON(){	
 		JsonRepresentation result = null;
 		TaxiDriver taxiDriver = taxiHelper.getTaxiDriver(this.targetDNI);
 		if (taxiDriver == null) {
@@ -47,21 +46,8 @@ public class TaxiResource extends ServerResource {
 		return result;
 	}
 	
-	@Get("htm")
-	public Representation getUserHtml(){
-		StringRepresentation result = null;
-		TaxiDriver taxiDriver = taxiHelper.getTaxiDriver(this.targetDNI);		
-		if (taxiDriver == null) {
-			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
-		}
-		else {
-			result = new StringRepresentation(taxiDriver.toString());
-		}
-		return result;
-	}
-	
 	@Put("json")
-	public Representation putUserJSON(Representation representation){
+	public Representation putTaxiDriverJSON(Representation representation){
 		try{
 			JsonRepresentation userRepresentation = new JsonRepresentation(representation);
 			TaxiDriver taxiDriver = JsonHandler.fromJson(userRepresentation.getText(), TaxiDriver.class);

@@ -12,7 +12,7 @@ import org.restlet.resource.ServerResource;
 import com.coctelmental.server.helpers.ServiceRequestHelper;
 import com.coctelmental.server.utils.JsonHandler;
 
-public class ConfirmationRequestResource extends ServerResource {
+public class ServiceRequestResponseResource extends ServerResource {
 
 	private String requestID;
 	
@@ -30,7 +30,7 @@ public class ConfirmationRequestResource extends ServerResource {
 	}
 	
 	@Post("json")
-	public Representation manageServiceRequest(Representation representation){
+	public Representation manageResponseJSON(Representation representation){
 		try{
 			JsonRepresentation jsonRepresentation = new JsonRepresentation(representation);
 			String[] requestData = JsonHandler.fromJson(jsonRepresentation.getText(), String[].class);

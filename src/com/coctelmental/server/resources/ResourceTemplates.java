@@ -18,5 +18,5 @@ public interface ResourceTemplates {
 	public static final String SERVICE_REQUEST_RESOURCE = "/service-request";
 	public static final String SERVICE_REQUEST_RESOURCE_WITH_ID = "/service-request/{taxiUUID}";
 	public static final String SERVICE_REQUEST_RESOURCE_WITH_REQUESTID = "/service-request/{taxiUUID}/request/{requestID}";
-	public static final String CONFIRMATION_REQUEST_RESOURCE = "/confirmation-request/{requestID}";
+	public static final String SERVICE_REQUEST_RESPONSE_RESOURCE = "/request-response/{requestID}";
 }

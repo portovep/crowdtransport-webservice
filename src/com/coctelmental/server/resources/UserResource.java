@@ -7,7 +7,6 @@ import java.net.URLDecoder;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
@@ -45,19 +44,6 @@ public class UserResource extends ServerResource {
 		}
 		else {
 			result = new JsonRepresentation(JsonHandler.toJson(user));
-		}
-		return result;
-	}
-	
-	@Get("htm")
-	public Representation getUserHtml(){
-		StringRepresentation result = null;
-		User user = userHelper.getUser(this.targetID);		
-		if (user == null) {
-			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
-		}
-		else {
-			result = new StringRepresentation(user.toString());
 		}
 		return result;
 	}

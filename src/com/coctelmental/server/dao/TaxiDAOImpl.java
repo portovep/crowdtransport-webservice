@@ -26,7 +26,7 @@ public class TaxiDAOImpl implements TaxiDAO {
 				taxiDriver.setPassword(rs.getString(3));
 				taxiDriver.setEmail(rs.getString(4));
 				taxiDriver.setLicenceNumber(rs.getString(5));
-				taxiDriver.setCarTradeMark(rs.getString(6));
+				taxiDriver.setCarBrand(rs.getString(6));
 				taxiDriver.setCarModel(rs.getString(7));
 			}
 			rs.close();
@@ -57,7 +57,7 @@ public class TaxiDAOImpl implements TaxiDAO {
 				+ "'," + "'" + taxiDriver.getPassword() + "'," + "'"
 				+ taxiDriver.getEmail() + "'," + "'"
 				+ taxiDriver.getLicenceNumber() + "'," + "'"
-				+ taxiDriver.getCarTradeMark() + "'," + "'"
+				+ taxiDriver.getCarBrand() + "'," + "'"
 				+ taxiDriver.getCarModel() + "');";
 
 		try {
