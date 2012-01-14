@@ -14,7 +14,7 @@ import com.coctelmental.server.utils.Tools;
 public class TaxiLocationsStore {
 	
 	private static final int MAX_DISTANCE = 2000; // 2 km
-	private static final long LOCATION_LIFE_TIME = 30000; // 1/2 minute
+	private static final long LOCATION_LIFE_TIME = 60000; // 1 minute
 	
 	private static TaxiLocationsStore singletonTaxiLocationsStore = new TaxiLocationsStore();
 	private HashMap<String, LocationInfo> taxiLocationsList;
