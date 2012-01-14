@@ -73,61 +73,63 @@ public class ServiceRequestStore {
 		synchronized (requests) {
 			requestList = requests.get(taxiDriverUUID);
 		}		
-		synchronized (requestList) {
 			if (requestList != null && !requestList.isEmpty()) {
-				for(ServiceRequestInfo request : requestList) {
-					// looking for target request
-					if (request.getUserUUID().equals(requestID))
-						return request;
-				}
-			}			
-		}
+				synchronized (requestList) {
+					for(ServiceRequestInfo request : requestList) {
+						// looking for target request
+						if (request.getUserUUID().equals(requestID))
+							return request;
+					}
+				}			
+			}
 		return null;
 	}
 	
-	public synchronized List<ServiceRequestInfo> getAllServiceRequest(String taxiDriverUUID) {
-		return requests.get(taxiDriverUUID);
+	public List<ServiceRequestInfo> getAllServiceRequest(String taxiDriverUUID) {
+		synchronized (requests) {
+			return requests.get(taxiDriverUUID);
+		}
 	}
 
-	public synchronized boolean removeServiceRequest(String taxiDriverUUID, String requestID) {
+	public boolean removeServiceRequest(String taxiDriverUUID, String requestID) {
 		ArrayList<ServiceRequestInfo> requestList = null;
 		synchronized (requests) {
 			requestList = requests.get(taxiDriverUUID);
 		}
-		synchronized (requestList) {
 			if (requestList != null && !requestList.isEmpty()) {
-				Iterator<ServiceRequestInfo> itr = requestList.iterator();
-				while (itr.hasNext()) {
-					ServiceRequestInfo request = itr.next(); 
-					// looking for target request
-					if (request.getUserUUID().equals(requestID))
-						// remove request
-						itr.remove(); // avoid ConcurrentModificationException
-						return true;
-				}
-			}			
-		}
+				synchronized (requestList) {
+					Iterator<ServiceRequestInfo> itr = requestList.iterator();
+					while (itr.hasNext()) {
+						ServiceRequestInfo request = itr.next(); 
+						// looking for target request
+						if (request.getUserUUID().equals(requestID))
+							// remove request
+							itr.remove(); // avoid ConcurrentModificationException
+							return true;
+					}
+				}			
+			}
 		return false;
 	}
 	
-	public synchronized List<String> removeAllServiceRequest(String taxiDriverUUID) {
+	public List<String> removeAllServiceRequest(String taxiDriverUUID) {
 		List<String> usersUUIDs = new ArrayList<String>();
 		ArrayList<ServiceRequestInfo> requestList = null;
 		synchronized (requests) {
 			requestList = requests.get(taxiDriverUUID);
 		}
-		synchronized (requestList) {
 			if (requestList != null && !requestList.isEmpty()) {
-				Iterator<ServiceRequestInfo> itr = requestList.iterator();
-				while (itr.hasNext()) {
-					ServiceRequestInfo request = itr.next();
-					// save user UUID for push notification
-					usersUUIDs.add(request.getUserUUID());
-					// remove request
-					itr.remove(); // avoid ConcurrentModificationException
-				}
-			}			
-		}
+				synchronized (requestList) {
+					Iterator<ServiceRequestInfo> itr = requestList.iterator();
+					while (itr.hasNext()) {
+						ServiceRequestInfo request = itr.next();
+						// save user UUID for push notification
+						usersUUIDs.add(request.getUserUUID());
+						// remove request
+						itr.remove(); // avoid ConcurrentModificationException
+					}
+				}			
+			}
 		return usersUUIDs;
 	}
 	
