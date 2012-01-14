@@ -9,7 +9,6 @@ import java.util.List;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
@@ -51,20 +50,6 @@ public class LocationResource extends ServerResource{
 			result = new JsonRepresentation(JsonHandler.toJson(foundLocations, listType));
 		}
 		return result; 
-	}
-	
-	@Get("htm")
-	public Representation getLocationInHtml(){	
-		StringRepresentation result = null;
-		List<BusLocation> foundLocations = locationHelper.getBusLocations(targetID);
-		if (foundLocations == null) {
-			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
-		}
-		else {
-			Type listType = new TypeToken<List<BusLocation>>() {}.getType();
-			result = new StringRepresentation(JsonHandler.toJson(foundLocations, listType));
-		}
-		return result;
 	}
 	
 	@Put("json")
