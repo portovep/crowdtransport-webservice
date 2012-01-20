@@ -5,6 +5,7 @@ import com.coctelmental.server.dao.BusCompanyDAOImpl;
 import com.coctelmental.server.dao.BusDAO;
 import com.coctelmental.server.dao.BusDAOImpl;
 import com.coctelmental.server.model.BusDriver;
+import com.coctelmental.server.utils.MailHandler;
 
 public class BusHelper {
 
@@ -40,11 +41,16 @@ public class BusHelper {
 				//set resultCode to invalid licenceNumber
 				resultCode = EC_INVALID_AUTH_CODE;
 			else {
-				// valid licence, then, add user
+				// valid code, then, add user
 				int result= busDAO.addBusDriver(busDriver);
 				// check correct update in bbdd
-				if (result < 1)
+				if (result < 1) {
 					resultCode = EC_BBDD_ERROR;
+				}
+				else {
+					// send confirmation email
+					MailHandler.sendRegitrationMail(busDriver.getFullName(), busDriver.getEmail());
+				}
 			}			
 		}
 		return resultCode;

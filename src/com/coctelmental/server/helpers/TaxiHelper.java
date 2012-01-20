@@ -5,6 +5,7 @@ import com.coctelmental.server.dao.TaxiLicenceDAOImpl;
 import com.coctelmental.server.dao.TaxiDAO;
 import com.coctelmental.server.dao.TaxiDAOImpl;
 import com.coctelmental.server.model.TaxiDriver;
+import com.coctelmental.server.utils.MailHandler;
 
 
 public class TaxiHelper {
@@ -44,8 +45,13 @@ public class TaxiHelper {
 				// valid licence, then, add user
 				int result= taxiDAO.addTaxiDriver(taxiDriver);
 				// check correct update in bbdd
-				if (result < 1)
+				if (result < 1) {
 					resultCode = EC_BBDD_ERROR;
+				}
+				else {
+					// send confirmation email
+					MailHandler.sendRegitrationMail(taxiDriver.getFullName(), taxiDriver.getEmail());
+				}
 			}			
 		}
 		return resultCode;

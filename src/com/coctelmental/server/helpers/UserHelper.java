@@ -3,6 +3,7 @@ package com.coctelmental.server.helpers;
 import com.coctelmental.server.dao.UserDAO;
 import com.coctelmental.server.dao.UserDAOImpl;
 import com.coctelmental.server.model.User;
+import com.coctelmental.server.utils.MailHandler;
 
 public class UserHelper {
 	
@@ -23,15 +24,19 @@ public class UserHelper {
 		//set default resultCode to specify correct registration
 		int resultCode = 1;
 		
-		// check if user with specified userName already exist
+		// check if an user with specified userName already exist
 		if (this.getUser(user.getUserName()) != null)
 			resultCode = EC_INVALID_USERNAME;
 		else {
-			// valid userName, then, add user
 			int result = userDAO.addUser(user);
 			// check correct update in bbdd
-			if (result < 1)
+			if (result < 1) {
 				resultCode = EC_BBDD_ERROR;
+			}
+			else {
+				// send confirmation email
+				MailHandler.sendRegitrationMail(user.getFullName(), user.getEmail());
+			}
 		}			
 		return resultCode;
 	}	
