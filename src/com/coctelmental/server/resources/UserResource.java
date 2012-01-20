@@ -19,6 +19,7 @@ import com.coctelmental.server.utils.JsonHandler;
 public class UserResource extends ServerResource {
 	
 	private String targetID;
+	private String targetPasswd;
 	private UserHelper userHelper;
 	
 	@Override
@@ -33,17 +34,31 @@ public class UserResource extends ServerResource {
 				targetID = null;
 			}
 		}
+		
+		targetPasswd = (String)getRequestAttributes().get("userPasswd");
+		if (targetPasswd!= null) {
+			try{
+				targetPasswd = URLDecoder.decode(targetPasswd, "UTF-8");
+			}catch(UnsupportedEncodingException uce){
+				uce.printStackTrace();
+				targetPasswd = null;
+			}
+		}		
 	}
 	
 	@Get("json")
 	public Representation getUserJSON(){	
 		JsonRepresentation result = null;
 		User user = userHelper.getUser(this.targetID);
-		if (user == null) {
+		if (user == null || targetPasswd == null) {
 			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 		}
 		else {
-			result = new JsonRepresentation(JsonHandler.toJson(user));
+			// check password
+			if (targetPasswd.equals(user.getPassword()))
+				result = new JsonRepresentation(JsonHandler.toJson(user));
+			else
+				getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 		}
 		return result;
 	}

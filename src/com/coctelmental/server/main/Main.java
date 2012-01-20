@@ -54,7 +54,8 @@ public class Main extends Application {
 		router.attach(ResourceTemplates.USER_RESOURCE, UserResource.class);
 		router.attach(ResourceTemplates.USER_RESOURCE_WITH_ID, UserResource.class);
 		router.attach(ResourceTemplates.TAXI_RESOURCE, TaxiResource.class);
-		router.attach(ResourceTemplates.TAXI_RESOURCE_WITH_ID, TaxiResource.class);		
+		router.attach(ResourceTemplates.TAXI_RESOURCE_WITH_ID, TaxiResource.class);	
+		router.attach(ResourceTemplates.TAXI_RESOURCE_WITHOUT_PASSWORD, TaxiResource.class);	
 		router.attach(ResourceTemplates.BUS_RESOURCE, BusResource.class);
 		router.attach(ResourceTemplates.BUS_RESOURCE_WITH_ID, BusResource.class);		
 		router.attach(ResourceTemplates.CITY_RESOURCE, CityResource.class);

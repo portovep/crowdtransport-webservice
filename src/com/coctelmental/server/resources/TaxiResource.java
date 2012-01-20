@@ -17,6 +17,7 @@ import com.coctelmental.server.utils.JsonHandler;
 public class TaxiResource extends ServerResource {
 	
 	private String targetDNI;
+	private String targetPasswd;
 	private TaxiHelper taxiHelper;
 	
 	@Override
@@ -31,6 +32,16 @@ public class TaxiResource extends ServerResource {
 				targetDNI = null;
 			}
 		}
+		
+		targetPasswd = (String)getRequestAttributes().get("taxiPasswd");
+		if (targetPasswd != null) {
+			try{
+				targetPasswd = URLDecoder.decode(targetPasswd, "UTF-8");
+			}catch(UnsupportedEncodingException uce){
+				uce.printStackTrace();
+				targetPasswd = null;
+			}
+		}
 	}
 	
 	@Get("json")
@@ -41,7 +52,24 @@ public class TaxiResource extends ServerResource {
 			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 		}
 		else {
-			result = new JsonRepresentation(JsonHandler.toJson(taxiDriver));
+			// check password
+			if (targetPasswd != null) {
+				if(targetPasswd.equals(taxiDriver.getPassword())) {
+					result = new JsonRepresentation(JsonHandler.toJson(taxiDriver));
+				}
+				else {
+					getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+				}
+			}
+			else {
+				// request for taxi driver name and car info
+				// personal data not needed is removed
+				taxiDriver.setDni("");
+				taxiDriver.setPassword("");
+				taxiDriver.setEmail("");
+				taxiDriver.setLicenceNumber("");
+				result = new JsonRepresentation(JsonHandler.toJson(taxiDriver));
+			}
 		}
 		return result;
 	}

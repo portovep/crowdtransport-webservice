@@ -17,6 +17,7 @@ import com.coctelmental.server.utils.JsonHandler;
 public class BusResource extends ServerResource {
 	
 	private String targetDNI;
+	private String targetPasswd;
 	private BusHelper busHelper;
 	
 	@Override
@@ -31,17 +32,31 @@ public class BusResource extends ServerResource {
 				targetDNI = null;
 			}
 		}
+		
+		targetPasswd = (String)getRequestAttributes().get("busPasswd");
+		if (targetPasswd!= null) {
+			try{
+				targetPasswd = URLDecoder.decode(targetPasswd, "UTF-8");
+			}catch(UnsupportedEncodingException uce){
+				uce.printStackTrace();
+				targetPasswd = null;
+			}
+		}
 	}
 	
 	@Get("json")
 	public Representation getBusDriverJSON(){	
 		JsonRepresentation result = null;
 		BusDriver busDriver = busHelper.getBusDriver(this.targetDNI);
-		if (busDriver == null) {
+		if (busDriver == null || targetPasswd == null) {
 			getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 		}
 		else {
-			result = new JsonRepresentation(JsonHandler.toJson(busDriver));
+			// check password
+			if (targetPasswd.equals(busDriver.getPassword()))
+				result = new JsonRepresentation(JsonHandler.toJson(busDriver));
+			else
+				getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 		}
 		return result;
 	}
