@@ -22,9 +22,13 @@ public class DeviceInfoStore {
 		deviceList.put(deviceInfo.getUUID(), deviceInfo.getRegistrationID());
 	}
 	
+	public synchronized void removeDeviceInfo(String deviceUUID) {
+		// remove device information
+		deviceList.remove(deviceUUID);
+	}
+	
 	public synchronized String getRegistrationID(String deviceUUID) {
 		return deviceList.get(deviceUUID);
 	}
 	
-
 }
