@@ -45,7 +45,7 @@ public class ServiceRequestResponseResource extends ServerResource {
 						getResponse().setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 				}
 				else if (requestData[0].equals("reject")) {
-					// TO-DO reject request
+					// TO-DO reject request (not supported yet)
 				}
 			}
 			else

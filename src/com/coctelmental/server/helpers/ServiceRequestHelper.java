@@ -42,7 +42,7 @@ public class ServiceRequestHelper {
 			sendTaxiNotification(serviceRequest.getTaxiDriverUUID(), addressFrom, addressTo, comment, String.valueOf(numberOfRequests));
 		}
 		else {
-			// TO-DO
+			System.out.println("Error adding service request");
 		}
 	}
 
@@ -90,7 +90,7 @@ public class ServiceRequestHelper {
 		for(String userUUID : usersUUIDs) {
 			int responseCode = sendUserNotification(userUUID, USER_PAYLOAD_CANCEL);
 			if (responseCode != HttpURLConnection.HTTP_OK) {
-				// TO-DO
+				System.out.println("Error sending C2DM push notification (request cancelation) to users. Result code -> " + responseCode);
 			}
 		}
 	}
