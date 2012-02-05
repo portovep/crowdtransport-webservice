@@ -63,7 +63,7 @@ public class TaxiResource extends ServerResource {
 			}
 			else {
 				// request for taxi driver name and car info
-				// personal data not needed is removed
+				// remove personal data
 				taxiDriver.setDni("");
 				taxiDriver.setPassword("");
 				taxiDriver.setEmail("");

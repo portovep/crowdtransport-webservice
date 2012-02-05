@@ -30,7 +30,7 @@ public class BusCompanyDAOImpl implements BusCompanyDAO {
 					con.close();
 				} catch (SQLException sqle) {
 					System.err
-							.println("Error while trying to close the connection: "
+							.println("Error trying to close the connection: "
 									+ sqle.getMessage());
 				}
 			}

@@ -25,12 +25,12 @@ public class Main extends Application {
 	private static final int DEFAULT_PORT = 8085;
 	
 	public static void startServer(int port) throws Exception {
-		// Create a Restlet component and add a HTTP server
+		// create a Restlet component and add a HTTP server
 		Component component = new Component();
 		component.getServers().add(Protocol.HTTP, port);
-		// Create an instance of this application
+		// create an instance of this application
 		Application app = new Main();
-		// Attach context and app instance to our component (server)
+		// attach context and app instance to our component (server)
 		component.getDefaultHost().attach(CONTEXT, app);
 		component.start();
 	}
@@ -42,7 +42,7 @@ public class Main extends Application {
 	 */
 	public static void main(String[] args) throws Exception {
 		Integer port = DEFAULT_PORT;
-		// Retrieve port number passed as an argument
+		// retrieve port number passed as an argument
 		if(args.length > 0)
 			port = Integer.getInteger(args[1]);
 		startServer(port);

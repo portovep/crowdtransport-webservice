@@ -27,34 +27,33 @@ public class LineLocations {
 	}
 	
 	public void addNewLocation(CollaboratorBusLocation receivedBusLocation) {
-		// comprobamos si es un nuevo colaborador
+		// check if it's new collaborator
 		if (isNewUser(receivedBusLocation.getUserID())) {
 			System.out.println("Log: New user");
-			// encuadrar en hotspot si es posible
+			// check whether new location is within stored location's area
 			Integer busLocationID = matchWithStoredBusLocation(receivedBusLocation);
 			if (busLocationID != null) {
 				System.out.println("Log: Update bus position");
-				// el nuevo punto esta cerca de otro existente
-				// lo fusionamos con el existente
+				// new location is within the area of previous location
+				// merge with previous location
 				mergeWithStoredBusLocation(busLocationID, receivedBusLocation);
-				// añadimos al usuario a la lista de asociados
+				// add new collaborator
 				collaboratorList.put(receivedBusLocation.getUserID(), busLocationID);
 			}
 			else {
 				System.out.println("Log: Create new bus position");
-				// probablemente es un nuevo bus
-				// creamos un nuevo ID
+				// new bus location
+				// get new id
 				int newLocationID = generateLocationID();
-				// creamos una nueva localización
+				// build new StoredBusLocation
 				StoredBusLocation sbl = createStoredBusLocation(newLocationID, receivedBusLocation);
-				// añadimos la localización 
+				// add new bus location
 				busLocationList.put(newLocationID, sbl);
-				// añadimos el usuario 
+				// add collaborator 
 				collaboratorList.put(receivedBusLocation.getUserID(), newLocationID);
 			}
 				
 		}
-		// NO ES UN USUARIO NUEVO
 		else {
 			System.out.println("Log: existing user");
 			Integer lastSentLocationID = collaboratorList.get(receivedBusLocation.getUserID());
@@ -64,13 +63,12 @@ public class LineLocations {
 					mergeWithStoredBusLocation(lastSentLocationID, receivedBusLocation);
 				}
 				else {
-					// el usuaro ha dejado el bus
-					// borramos al usuario de la lista
+					// collaborator left previous bus
+					// remove collaborator from location list of previous bus
 					System.out.println("Log: Borrado User");
 					collaboratorList.remove(receivedBusLocation.getUserID());				
 				}
-			}
-			//else			
+			}			
 		}
 	}
 	
@@ -82,9 +80,9 @@ public class LineLocations {
 			int busLocationID = iterator.next();
 			StoredBusLocation sbl = busLocationList.get(busLocationID);
 			if(isOldLocation(sbl.getWhenStored())) {
-				// borramos colaboradores asociados
+				// remove associated collaborators
 				removeCollaborators(busLocationID);
-				// borramos la última localización proporcionada por el iterador
+				// remove old location
 				iterator.remove(); // avoid ConcurrentModificationException
 			}
 			else {
@@ -97,6 +95,8 @@ public class LineLocations {
 	}
 	
 	private int generateLocationID() {
+		if (counter == Integer.MAX_VALUE)
+			counter = 0; // reset counter
 		counter += 1;
 		return counter;
 	}
@@ -131,9 +131,9 @@ public class LineLocations {
 	}
 	
 	private void mergeWithStoredBusLocation(Integer busLocationID, CollaboratorBusLocation receivedBusLocation) {
-		// creamos una nueva storedLocation
+		// build new StoredBusLocation
 		StoredBusLocation sbl = createStoredBusLocation(busLocationID, receivedBusLocation);
-		// añadimos el nuevo punto sobreescribiendo el anterior
+		// update previous location
 		busLocationList.put(busLocationID, sbl);
 	}
 	
@@ -174,7 +174,7 @@ public class LineLocations {
 		while (iterator.hasNext()) {		
 			String collaboratorID = iterator.next();
 			if(collaboratorList.get(collaboratorID).equals(locationID))
-				// borramos el último usuario proporcionado por el iterador
+				// remove collaborator
 				iterator.remove();
 		}
 	}
